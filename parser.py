@@ -7,11 +7,11 @@
 #   By: adrian <adrian@student.42.fr>                +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/29 20:18:35 by adrian              #+#    #+#            #
-#   Updated: 2026/10/31 14:52:35 by adrian             ###   ########.fr      #
+#   Updated: 2026/11/02 21:21:20 by adrian             ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
-from io import TextIOWrapper
+import sys
 
 class Parser:
     def __init__(self, thing:str, name:str, line:int, coord_x :int, coord_y:int, metadata:str,):
@@ -23,18 +23,15 @@ class Parser:
         self.metadata = metadata
         self.ndrones = 0
 
-
-def parser(file: TextIOWrapper) -> str:
-    for line in file.readlines():
-        if line.strip() == '':
-            continue
+def parser(file: list[str]) -> str:
+    if line.strip() == '':
         yield line.strip()
-        if line[0] is ' ':
-            raise ValueError("Invalid input: line cannot start with a space")
-        line = line.strip()
-        if multiple_spaces(line):
-            raise ValueError("Invalid input: line cannot have multiple spaces between words")
-        return line
+    if line[0] is ' ':
+        raise ValueError("Invalid input: line cannot start with a space")
+    line = line.strip()
+    if multiple_spaces(line):
+        raise ValueError("Invalid input: line cannot have multiple spaces between words")
+    return line
 
 def multiple_spaces(line: str) -> bool:
     prev_sapce: bool = False
@@ -48,7 +45,7 @@ def multiple_spaces(line: str) -> bool:
     return False
         
         
-def parse_obj(line: str) -> Parser:
+def parse_obj(line: str, i: int) -> Parser:
     the_list: list[str] = line.split(' ')
     if the_list[1] == '0' and len(the_list) == 3:
         name:str = the_list[0]
@@ -57,13 +54,15 @@ def parse_obj(line: str) -> Parser:
         return Parser(name, line, 0, 0, '', ndrones)
     elif not the_list[1] == '0' and len(the_list) == 5: 
         raise ValueError("Invalid input: not right format")
+    elif the_list[1] == 'connection':
+        return Parser(the_list[0], i, 0, 0, 0, the_list[2]) 
     else:
-        name: str = the_list[0]
-        line: int = int(the_list[1])
+        thing: str = the_list[0]
+        name: str = the_list[1]
         coord_x: int = int(the_list[2])
         coord_y: int = int(the_list[3])
         metadata: str = the_list[4]
-        return Parser(name, line, coord_x, coord_y, metadata)
+        return Parser(name, i, coord_x, coord_y, metadata)
 
 def circuit_map(input_file: list[str]) -> list[Parser]:
     circuit: list[Parser] = []
@@ -88,8 +87,12 @@ def check_circuit(circuit: list[Parser]) -> None:
                 raise ValueError(f"Invalid input: the line {obj.line} has invalid metadata format")
     except ValueError as e:
         print(e)
-        exit(1)
-            
+    check_unique_name(circuit)
+    check_unique_coordinates(circuit)
+    check_unique_start_end(circuit)
+    exit(1)
+
+
 
         
             
