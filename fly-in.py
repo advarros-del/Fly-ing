@@ -7,7 +7,7 @@
 #   By: adrian <adrian@student.42.fr>                +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/11/02 13:35:26 by adrian              #+#    #+#            #
-#   Updated: 2026/11/02 21:08:55 by adrian             ###   ########.fr      #
+#   Updated: 2026/11/03 22:10:47 by adrian             ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -34,6 +34,11 @@ def main():
     parks_dict: dict[str, Park] = {}
     for park in lst_parks:
         parks_dict[park.name] = park
+    lst_streets = set_streets(checker_map, parks_dict)
+    the_map: map = set_map(lst_parks, lst_streets, parks_dict)
+    lst_rutes: list[Rute] = find_rutes(the_map)
+    
+    
 
 
 if __name__ == "__main__":

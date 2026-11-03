@@ -7,7 +7,7 @@
 #   By: adrian <adrian@student.42.fr>                +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/29 19:42:53 by adrian              #+#    #+#            #
-#   Updated: 2026/11/02 21:25:15 by adrian             ###   ########.fr      #
+#   Updated: 2026/11/03 21:13:36 by adrian             ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -17,9 +17,10 @@ class Drone:
         self.steps = 0
         
 class Street:
-    def __init__(self, name, length):
-        self.conections: list[Park] = []
-        self.capacity: int = 1
+    def __init__(self, park_a: Park, park_b: Park, capacity: int = 1):
+        self.park_a: Park = park_a
+        self.park_b: Park = park_b
+        self.capacity: int = capacity
 
 class Park:
     def __init__(self, name, coord_x, coord_y, capacity, color):
@@ -31,7 +32,14 @@ class Park:
         self.capacity: int = 1
         self.zone: str = ''
         self.color: str = ''
-        self.connections: list[Park] = []
+        self.connections: list[Street] = []
+
+class map:
+    def __init__(self, name, parks, streets):
+        self.parks: list[Park] = []
+        self.streets: list[Street] = []
+        self.start_hub: Park = None
+        self.end_hub: Park = None
 
 class Rute:
     def __init__(self, name, min_steps, path):
