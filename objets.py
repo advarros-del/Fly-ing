@@ -7,7 +7,7 @@
 #   By: adrian <adrian@student.42.fr>                +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/29 19:42:53 by adrian              #+#    #+#            #
-#   Updated: 2026/11/03 21:13:36 by adrian             ###   ########.fr      #
+#   Updated: 2026/11/06 08:32:59 by adrian             ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -34,18 +34,18 @@ class Park:
         self.color: str = ''
         self.connections: list[Street] = []
 
-class map:
-    def __init__(self, name, parks, streets):
-        self.parks: list[Park] = []
-        self.streets: list[Street] = []
-        self.start_hub: Park = None
-        self.end_hub: Park = None
+class Map:
+    def __init__(self, parks, streets, start_hub, end_hub):
+        self.parks: list[Park] = parks
+        self.streets: list[Street] = streets
+        self.start_hub: Park = start_hub
+        self.end_hub: Park = end_hub
 
 class Rute:
-    def __init__(self, name, min_steps, path):
-        self.name = name
-        self.min_steps = 0
-        self.path = []
+    def __init__(self, id, min_steps, path):
+        self.id = id
+        self.min_steps = min_steps
+        self.path = path
 
 class Planeer:
     def __init__(self, name, rutes):

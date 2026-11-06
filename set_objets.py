@@ -7,7 +7,7 @@
 #   By: adrian <adrian@student.42.fr>                +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/11/02 20:08:08 by adrian              #+#    #+#            #
-#   Updated: 2026/11/03 22:06:48 by adrian             ###   ########.fr      #
+#   Updated: 2026/11/06 08:31:57 by adrian             ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -77,7 +77,7 @@ def set_streets(checker_map: list[Parser], parks_dict: dict[str, Park]) -> list[
             lst_streets.append(aux_street)
     return lst_streets
     
-def set_map(lst_parks: list[Park], lst_streets: list[Street], parks_dict: dict[str, Park]) -> map:
+def set_map(lst_parks: list[Park], lst_streets: list[Street], parks_dict: dict[str, Park]) -> Map:
     start_hub: Park = None
     end_hub: Park = None
     for park in lst_parks:
@@ -85,15 +85,16 @@ def set_map(lst_parks: list[Park], lst_streets: list[Street], parks_dict: dict[s
             start_hub = park
         elif park.end:
             end_hub = park
-    return map(lst_parks, lst_streets, start_hub, end_hub)
+    return Map(lst_parks, lst_streets, start_hub, end_hub)
 
-def find_rutes(the_map: map) -> list[Rute]:
+def find_rutes(the_map: Map) -> list[Rute]:
     lst_rutes: list[Rute] = []
     visited: set[Park] = set()
     path: list[Park] = []
     dfs(the_map.start_hub, the_map.end_hub, visited, path, lst_rutes)
     if not lst_rutes:
         raise ValueError("Invalid input: no valid routes found from start to end hub")
+    return lst_rutes
 
 
 def dfs(current: Park, end: Park, visited: set[Park], path: list[Park], lst_rutes: list[Rute], i: int = 1) -> None:
