@@ -7,7 +7,7 @@
 #   By: adrian <adrian@student.42.fr>                +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/29 19:42:53 by adrian              #+#    #+#            #
-#   Updated: 2026/11/06 08:32:59 by adrian             ###   ########.fr      #
+#   Updated: 2026/11/09 20:32:15 by adrian             ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -47,10 +47,12 @@ class Rute:
         self.min_steps = min_steps
         self.path = path
 
-class Planeer:
-    def __init__(self, name, rutes):
-        self.name = name
-        self.rutes = []
+class Plan:
+    def __init__(self, id, rutes, turns, drones):
+        self.id: int = id
+        self.rutes: list[Rute] = []
+        self.turns: int = turns
+        self.drones: list[Drone] = []
 
 class Simulation:
     def __init__(self, name, planeers):
