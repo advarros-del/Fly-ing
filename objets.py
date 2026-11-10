@@ -7,14 +7,17 @@
 #   By: adrian <adrian@student.42.fr>                +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/29 19:42:53 by adrian              #+#    #+#            #
-#   Updated: 2026/11/09 20:32:15 by adrian             ###   ########.fr      #
+#   Updated: 2026/11/10 19:06:24 by adrian             ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
 class Drone:
-    def __init__(self, name, model):
+    def __init__(self, id):
         self.id = id(self)
-        self.steps = 0
+        self.position: Park | Street = None
+        self.rute: Rute = None
+        self.next_park: Park = None
+        self.finished: bool = False
         
 class Street:
     def __init__(self, park_a: Park, park_b: Park, capacity: int = 1):
@@ -53,6 +56,12 @@ class Plan:
         self.rutes: list[Rute] = []
         self.turns: int = turns
         self.drones: list[Drone] = []
+        self.drones_finished: list[Drone] = []
+        self.drones_position: list[Drone] = []
+        self.drones_crossing: list[Drone] = []
+        self.movements: list[tuple[Drone, Park]] = []
+        self.valid: bool = True
+        self.turns_finished: int = 0
 
 class Simulation:
     def __init__(self, name, planeers):

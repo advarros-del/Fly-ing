@@ -7,7 +7,7 @@
 #   By: adrian <adrian@student.42.fr>                +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/11/06 12:04:51 by adrian              #+#    #+#            #
-#   Updated: 2026/11/09 21:39:57 by adrian             ###   ########.fr      #
+#   Updated: 2026/11/10 20:00:26 by adrian             ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -25,7 +25,7 @@ def correct_steps(lst_rutes: list[Route], parks_dict: dict[str, Park]) -> list[R
                 step_coutner += 2
         route.min_steps = step_coutner
 
-def do_the_plan(lst_rutes: list[Route], drones: list[Drone]) -> list[Plan]:
+def plan_generator(lst_rutes: list[Route], drones: list[Drone]) -> list[Plan]:
     lst_plans: list[Plan] = []
     assignment: list[int] = [0] * len(lst_rutes)
     def distribute_drones(rute_index: int, drones_remaining: int):
@@ -43,5 +43,38 @@ def do_the_plan(lst_rutes: list[Route], drones: list[Drone]) -> list[Plan]:
     return lst_plans
 
 
-def plan_generator(lst_rutes: list[Route], drones: list[Drone], lst_plans: list[Plan]):
-    as
+def simualtion(plan: Plan) -> Plan:
+    plan_backup: Plan = plan
+    turns: int = 0
+    priority_rules: dict[str, int] = {"priority": 1, "normal": 2, "restricted": 2}
+    for drone in plan.drones:
+        if drone.position is None:
+            drone.position = plan.rutes[drone.rute.id].path[0]
+        if drone.rute is None:
+            for asignation in plan_backup.asignments:
+                if asignation[0] > 0:
+                    drone.rute = plan.rutes[asignation[1]]
+                    asignation[0] -= 1
+                    break
+                else:
+                    continue
+    while (len(plan.drones_finished) < len(plan.drones)):
+        movements_this_turn: list[tuple[Drone, Park]] = []
+        plan.drones.sort(key=lambda d: (priority_rules[d.next_park.zone], d.id))
+        turns += 1
+        for drone in plan.drones:
+            if drone not in plan.drones_finished:
+                if drone.position == drone.next_park:
+                    if drone.position == drone.rute.path[-1]:
+                        drone.finished = True
+                        plan.drones_finished.append(drone)
+                    else:
+                        drone.next_park = drone.rute.path[drone.rute.path.index(drone.position) + 1]
+            elif drone.finished:
+                continue
+    if plan.drones_finished != len(plan.drones):
+        plan.valid = False
+    return plan 
+            
+            
+    
