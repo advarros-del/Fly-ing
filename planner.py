@@ -7,7 +7,7 @@
 #   By: adrian <adrian@student.42.fr>                +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/11/06 12:04:51 by adrian              #+#    #+#            #
-#   Updated: 2026/11/10 20:00:26 by adrian             ###   ########.fr      #
+#   Updated: 2026/11/13 20:15:44 by adrian             ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -59,6 +59,7 @@ def simualtion(plan: Plan) -> Plan:
                 else:
                     continue
     while (len(plan.drones_finished) < len(plan.drones)):
+        priority_parks_turn: list[Park] =  []
         movements_this_turn: list[tuple[Drone, Park]] = []
         plan.drones.sort(key=lambda d: (priority_rules[d.next_park.zone], d.id))
         turns += 1
@@ -72,9 +73,34 @@ def simualtion(plan: Plan) -> Plan:
                         drone.next_park = drone.rute.path[drone.rute.path.index(drone.position) + 1]
             elif drone.finished:
                 continue
+            for street in drone.position.connections:
+                if street.park_a == drone.position:
+                    next_park = street.park_b
+                else:
+                    next_park = street.park_a
+                if next_park.zone == "priority":
+                    priority_parks_turn.append(next_park)
+            if drone.next_park.capacity > 0 and drone.next_park.zone in ["priority", "normal"]:
+                drone.position = drone.next_park
+                drone.next_park.capacity -= 1
+            elif drone.next_park.zone == "restricted":
+                if drone.next_park.capacity > 0:
+                    for street in drone.position.connections:
+                        if street.park_a == drone.position:
+                            next_park = street.park_b
+                        else:
+                            next_park = street.park_a
+                        if next_park == drone.next_park:
+                            drone.
+                    drone.next_park.capacity -= 1
+                else:
+                    continue
+            else:
+                continue
+                    
     if plan.drones_finished != len(plan.drones):
         plan.valid = False
     return plan 
-            
+        
             
     
